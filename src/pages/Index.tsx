@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Calendar, Clock, Users, Search, ArrowDown, Plus, MapPin, Activity, Menu } from 'lucide-react';
 import BackgroundAnimation from '../components/BackgroundAnimation';
@@ -284,8 +283,8 @@ const Index = () => {
       />
 
       {/* ChatBot */}
-      <Chat
-      userHealthProfile={user?.healthProfile}
+      <ChatBot
+        userHealthProfile={user?.healthProfile}
       />
     </>
   );

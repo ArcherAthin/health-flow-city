@@ -22,6 +22,10 @@ const PatientDashboard: React.FC<PatientDashboardProps> = ({ user, onLogout }) =
     onLogout();
   };
 
+  const handleBackToDashboard = () => {
+    setActiveView('dashboard');
+  };
+
   return (
     <div className="min-h-screen p-4 md:p-6">
       <div className="max-w-7xl mx-auto">
@@ -227,7 +231,7 @@ const PatientDashboard: React.FC<PatientDashboardProps> = ({ user, onLogout }) =
           </div>
         )}
 
-        {activeView === 'book' && <AppointmentBooking />}
+        {activeView === 'book' && <AppointmentBooking onBack={handleBackToDashboard} />}
         {activeView === 'queue' && <LiveQueue />}
       </div>
     </div>
