@@ -1,8 +1,9 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* MediQueue Design System - Glassmorphism & Smart City Aesthetics */
+/* MediQueue Design System - Enhanced Glassmorphism & Medical-Tech Aesthetics */
 
 @layer base {
   :root {
@@ -36,13 +37,16 @@
 
     --radius: 1rem;
 
-    /* MediQueue Custom Variables */
-    --glass-bg: rgba(255, 255, 255, 0.1);
-    --glass-border: rgba(255, 255, 255, 0.2);
+    /* Enhanced MediQueue Custom Variables */
+    --glass-bg: rgba(255, 255, 255, 0.12);
+    --glass-border: rgba(255, 255, 255, 0.25);
     --glass-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
     --neon-blue: #00d4ff;
     --medical-blue: #0891b2;
     --ice-blue: #e0f2fe;
+    --pulse-blue: #06b6d4;
+    --medical-green: #10b981;
+    --tech-purple: #8b5cf6;
   }
 
   body {
@@ -50,10 +54,17 @@
     background-attachment: fixed;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   }
+
+  /* Mobile-first responsive text sizes */
+  @media (max-width: 768px) {
+    html {
+      font-size: 14px;
+    }
+  }
 }
 
 @layer components {
-  /* Glassmorphism Base */
+  /* Enhanced Glassmorphism */
   .glass {
     background: var(--glass-bg);
     backdrop-filter: blur(20px);
@@ -63,32 +74,23 @@
   }
 
   .glass-strong {
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(25px);
-    -webkit-backdrop-filter: blur(25px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 12px 40px rgba(31, 38, 135, 0.4);
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    box-shadow: 0 12px 40px rgba(31, 38, 135, 0.45);
   }
 
-  /* Medical Cards */
+  /* Enhanced Medical Cards */
   .medical-card {
-    @apply glass rounded-2xl p-6 transition-all duration-300 hover:shadow-2xl hover:scale-[1.02];
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+    @apply glass rounded-2xl p-4 md:p-6 transition-all duration-300 hover:shadow-2xl hover:scale-[1.02];
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.08));
   }
 
-  /* Floating Animation */
-  .float {
-    animation: float 6s ease-in-out infinite;
-  }
-
-  .float-delayed {
-    animation: float 6s ease-in-out infinite 2s;
-  }
-
-  /* Queue Token Styles */
+  /* Enhanced Queue Token Styles */
   .token-active {
     @apply bg-gradient-to-r from-emerald-400 to-cyan-400 text-white;
-    box-shadow: 0 0 20px rgba(52, 211, 153, 0.5);
+    box-shadow: 0 0 30px rgba(52, 211, 153, 0.6), 0 0 60px rgba(6, 182, 212, 0.3);
   }
 
   .token-waiting {
@@ -97,37 +99,33 @@
 
   .token-upcoming {
     @apply bg-gradient-to-r from-amber-200 to-orange-200 text-amber-800;
+    box-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
   }
 
-  /* Pulse for active elements */
-  .pulse-medical {
-    animation: pulse-medical 2s ease-in-out infinite;
-  }
-
-  /* Button Styles */
+  /* Enhanced Button Styles */
   .btn-primary {
-    @apply bg-gradient-to-r from-sky-500 to-cyan-500 text-white px-6 py-3 rounded-xl font-medium;
+    @apply bg-gradient-to-r from-sky-500 to-cyan-500 text-white px-4 md:px-6 py-3 rounded-xl font-medium;
     @apply transition-all duration-200 hover:scale-105 hover:shadow-xl;
-    box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
+    box-shadow: 0 4px 15px rgba(14, 165, 233, 0.4);
   }
 
   .btn-secondary {
-    @apply glass text-sky-700 px-6 py-3 rounded-xl font-medium;
+    @apply glass text-sky-700 px-4 md:px-6 py-3 rounded-xl font-medium;
     @apply transition-all duration-200 hover:scale-105 hover:shadow-lg;
   }
 
-  /* Sleek Glow for Active Queue Token */
+  /* Enhanced Focus Glow */
   .focus-glow {
-    box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.10), 
-                0 0 32px 8px rgba(6, 182, 212, 0.14), 
-                0 2px 24px 0 rgba(0, 212, 255, 0.16), 
-                0 0 0 1.5px #fff inset;
-    border: 2.5px solid transparent;
+    box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.15), 
+                0 0 40px 12px rgba(6, 182, 212, 0.20), 
+                0 4px 32px 0 rgba(0, 212, 255, 0.22), 
+                0 0 0 2px #fff inset;
+    border: 3px solid transparent;
     background-clip: padding-box;
-    transition: box-shadow 0.5s cubic-bezier(.6,.8,.25,1), border-color 0.4s;
+    transition: box-shadow 0.6s cubic-bezier(.6,.8,.25,1), border-color 0.5s;
   }
 
-  /* Animated Background Elements */
+  /* Enhanced Background Elements */
   .bg-particles {
     position: fixed;
     top: 0;
@@ -136,66 +134,117 @@
     height: 100%;
     pointer-events: none;
     z-index: -1;
+    overflow: hidden;
   }
 
   .particle {
     position: absolute;
-    background: var(--neon-blue);
     border-radius: 50%;
-    opacity: 0.1;
-    animation: drift 20s linear infinite;
+    opacity: 0.15;
+    animation: drift-enhanced 25s linear infinite;
+  }
+
+  /* Mobile responsive adjustments */
+  @media (max-width: 768px) {
+    .medical-card {
+      @apply p-4;
+    }
+    
+    .btn-primary, .btn-secondary {
+      @apply px-4 py-3 text-base;
+    }
   }
 }
 
 @layer utilities {
   .text-gradient {
-    background: linear-gradient(135deg, #0891b2, #06b6d4, #00d4ff);
+    background: linear-gradient(135deg, #0891b2, #06b6d4, #00d4ff, #8b5cf6);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
   }
 
   .border-glass {
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.25);
   }
 }
 
-/* Keyframe Animations */
+/* Enhanced Keyframe Animations */
 @keyframes float {
   0%, 100% { transform: translateY(0px) rotate(0deg); }
-  33% { transform: translateY(-10px) rotate(1deg); }
-  66% { transform: translateY(-5px) rotate(-1deg); }
+  33% { transform: translateY(-12px) rotate(1.5deg); }
+  66% { transform: translateY(-6px) rotate(-1deg); }
 }
 
-@keyframes pulse-medical {
+@keyframes float-delayed {
+  0%, 100% { transform: translateY(0px) scale(1) rotate(0deg);}
+  50% { transform: translateY(-20px) scale(1.05) rotate(2deg);}
+}
+
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0px) translateX(0px) rotate(0deg); }
+  25% { transform: translateY(-15px) translateX(10px) rotate(1deg); }
+  50% { transform: translateY(-10px) translateX(-5px) rotate(-0.5deg); }
+  75% { transform: translateY(-20px) translateX(15px) rotate(1.5deg); }
+}
+
+@keyframes pulse-slow {
   0%, 100% { 
-    box-shadow: 0 0 0 0 rgba(14, 165, 233, 0.7);
+    opacity: 0.4;
     transform: scale(1);
   }
   50% { 
-    box-shadow: 0 0 0 10px rgba(14, 165, 233, 0);
+    opacity: 0.8;
     transform: scale(1.05);
   }
 }
 
-@keyframes drift {
+@keyframes pulse-ring {
+  0% { 
+    transform: scale(0.8);
+    opacity: 0.8;
+  }
+  50% { 
+    transform: scale(1.2);
+    opacity: 0.3;
+  }
+  100% { 
+    transform: scale(0.8);
+    opacity: 0.8;
+  }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes spin-reverse {
+  from { transform: rotate(360deg); }
+  to { transform: rotate(0deg); }
+}
+
+@keyframes drift-enhanced {
   0% {
-    transform: translateY(100vh) translateX(-10px);
+    transform: translateY(100vh) translateX(-20px) rotate(0deg);
     opacity: 0;
   }
   10% {
-    opacity: 0.1;
+    opacity: 0.15;
+  }
+  50% {
+    transform: translateY(50vh) translateX(20px) rotate(180deg);
+    opacity: 0.3;
   }
   90% {
-    opacity: 0.1;
+    opacity: 0.15;
   }
   100% {
-    transform: translateY(-10vh) translateX(10px);
+    transform: translateY(-10vh) translateX(-10px) rotate(360deg);
     opacity: 0;
   }
 }
 
-/* Ripple Effect */
 @keyframes ripple {
   0% {
     transform: scale(0);
@@ -205,6 +254,35 @@
     transform: scale(4);
     opacity: 0;
   }
+}
+
+/* Enhanced Animation Classes */
+.animate-float {
+  animation: float 15s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: float-delayed 18s ease-in-out infinite;
+}
+
+.animate-float-slow {
+  animation: float-slow 25s ease-in-out infinite;
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 4s ease-in-out infinite;
+}
+
+.animate-pulse-ring {
+  animation: pulse-ring 3s ease-in-out infinite;
+}
+
+.animate-spin-slow {
+  animation: spin-slow 20s linear infinite;
+}
+
+.animate-spin-reverse {
+  animation: spin-reverse 15s linear infinite;
 }
 
 .ripple {
@@ -220,29 +298,23 @@
   width: 0;
   height: 0;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.6);
   transform: translate(-50%, -50%);
-  animation: ripple 0.6s ease-out;
+  animation: ripple 0.8s ease-out;
 }
 
-/* Optional: Staggered float for blobs */
-@keyframes float-delayed {
-  0%, 100% { transform: translateY(0px) scale(1) rotate(0deg);}
-  50% { transform: translateY(-24px) scale(1.05) rotate(1.5deg);}
-}
+/* Enhanced particle colors with medical theme */
+.bg-sky-300    { background: linear-gradient(45deg, #7dd3fc, #38bdf8) !important; }
+.bg-cyan-300   { background: linear-gradient(45deg, #67e8f9, #22d3ee) !important; }
+.bg-emerald-200 { background: linear-gradient(45deg, #a7f3d0, #6ee7b7) !important; }
+.bg-red-300    { background: linear-gradient(45deg, #fca5a5, #f87171) !important; }
+.bg-purple-300 { background: linear-gradient(45deg, #d8b4fe, #c084fc) !important; }
+.bg-pink-200   { background: linear-gradient(45deg, #fbcfe8, #f9a8d4) !important; }
+.bg-yellow-200 { background: linear-gradient(45deg, #fef9c3, #fde047) !important; }
 
-.animate-float {
-  animation: float 12s ease-in-out infinite;
+/* Mobile-first responsive utilities */
+@media (max-width: 640px) {
+  .text-4xl { font-size: 2.5rem; }
+  .text-7xl { font-size: 3.5rem; }
+  .px-8 { padding-left: 1.5rem; padding-right: 1.5rem; }
 }
-.animate-float-delayed {
-  animation: float-delayed 15s ease-in-out infinite;
-}
-
-/* Add support for accent colored particles */
-.bg-sky-300    { background: #7dd3fc !important; }
-.bg-cyan-300   { background: #67e8f9 !important; }
-.bg-emerald-200 { background: #a7f3d0 !important; }
-.bg-fuchsia-200 { background: #f5d0fe !important; }
-.bg-purple-200 { background: #e9d5ff !important; }
-.bg-pink-200   { background: #fbcfe8 !important; }
-.bg-yellow-200 { background: #fef9c3 !important; }
