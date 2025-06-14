@@ -3,9 +3,17 @@ import React, { useState } from 'react';
 import { Calendar, Clock, User, Bell, Search, Plus } from 'lucide-react';
 import LiveQueue from './LiveQueue';
 import DoctorCard from './DoctorCard';
+import { toast } from "@/hooks/use-toast";
 
 const PatientDashboard = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
+
+  const handleNewAppointment = () => {
+    toast({
+      title: "New Appointment",
+      description: "Start your appointment booking process.",
+    });
+  };
 
   const upcomingAppointments = [
     {
@@ -69,7 +77,7 @@ const PatientDashboard = () => {
               <button className="glass p-3 rounded-xl hover:scale-105 transition-transform">
                 <Bell className="text-sky-600" size={20} />
               </button>
-              <button className="btn-primary">
+              <button className="btn-primary" onClick={handleNewAppointment}>
                 <Plus size={20} className="mr-2" />
                 New Appointment
               </button>

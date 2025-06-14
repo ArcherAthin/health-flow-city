@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Clock, User, Calendar } from 'lucide-react';
+import { toast } from "@/hooks/use-toast";
 
 interface DoctorCardProps {
   name: string;
@@ -23,6 +24,14 @@ const DoctorCard: React.FC<DoctorCardProps> = ({
   image,
   onBook
 }) => {
+  const handleBook = () => {
+    toast({
+      title: "Appointment Initiated",
+      description: `Booking started with Dr. ${name}.`,
+    });
+    onBook();
+  };
+
   return (
     <div className="medical-card group cursor-pointer">
       <div className="flex items-start gap-4">
@@ -58,7 +67,7 @@ const DoctorCard: React.FC<DoctorCardProps> = ({
         </div>
         
         <button 
-          onClick={onBook}
+          onClick={handleBook}
           className="btn-primary text-sm px-4 py-2 opacity-0 group-hover:opacity-100 transition-all duration-200"
         >
           Book Now

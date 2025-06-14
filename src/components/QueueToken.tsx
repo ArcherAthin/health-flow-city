@@ -18,7 +18,8 @@ const QueueToken: React.FC<QueueTokenProps> = ({
   const getStatusClasses = () => {
     switch (status) {
       case 'active':
-        return 'token-active pulse-medical';
+        // Remove pulse, add focus-glow class for sleek highlight
+        return 'token-active focus-glow';
       case 'upcoming':
         return 'token-upcoming';
       default:

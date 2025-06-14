@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -117,6 +116,17 @@
     @apply transition-all duration-200 hover:scale-105 hover:shadow-lg;
   }
 
+  /* Sleek Glow for Active Queue Token */
+  .focus-glow {
+    box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.10), 
+                0 0 32px 8px rgba(6, 182, 212, 0.14), 
+                0 2px 24px 0 rgba(0, 212, 255, 0.16), 
+                0 0 0 1.5px #fff inset;
+    border: 2.5px solid transparent;
+    background-clip: padding-box;
+    transition: box-shadow 0.5s cubic-bezier(.6,.8,.25,1), border-color 0.4s;
+  }
+
   /* Animated Background Elements */
   .bg-particles {
     position: fixed;
@@ -214,3 +224,25 @@
   transform: translate(-50%, -50%);
   animation: ripple 0.6s ease-out;
 }
+
+/* Optional: Staggered float for blobs */
+@keyframes float-delayed {
+  0%, 100% { transform: translateY(0px) scale(1) rotate(0deg);}
+  50% { transform: translateY(-24px) scale(1.05) rotate(1.5deg);}
+}
+
+.animate-float {
+  animation: float 12s ease-in-out infinite;
+}
+.animate-float-delayed {
+  animation: float-delayed 15s ease-in-out infinite;
+}
+
+/* Add support for accent colored particles */
+.bg-sky-300    { background: #7dd3fc !important; }
+.bg-cyan-300   { background: #67e8f9 !important; }
+.bg-emerald-200 { background: #a7f3d0 !important; }
+.bg-fuchsia-200 { background: #f5d0fe !important; }
+.bg-purple-200 { background: #e9d5ff !important; }
+.bg-pink-200   { background: #fbcfe8 !important; }
+.bg-yellow-200 { background: #fef9c3 !important; }
