@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Calendar, Clock, Users, Search, ArrowDown, Plus } from 'lucide-react';
+import { Calendar, Clock, Users, Search, ArrowDown, Plus, MapPin, Activity } from 'lucide-react';
 import BackgroundAnimation from '../components/BackgroundAnimation';
 import PatientDashboard from '../components/PatientDashboard';
 
@@ -32,10 +32,10 @@ const Index = () => {
               <h1 className="text-2xl font-bold text-gradient">MediQueue</h1>
             </div>
             <div className="hidden md:flex items-center gap-6">
-              <a href="#features" className="text-gray-600 hover:text-sky-600 transition-colors">Features</a>
-              <a href="#how-it-works" className="text-gray-600 hover:text-sky-600 transition-colors">How it Works</a>
-              <a href="#hospitals" className="text-gray-600 hover:text-sky-600 transition-colors">Hospitals</a>
-              <button className="btn-secondary">Sign In</button>
+              <a href="#features" className="text-gray-600 hover:text-sky-600 transition-colors">How it Works</a>
+              <a href="#hospitals" className="text-gray-600 hover:text-sky-600 transition-colors">Browse Hospitals</a>
+              <a href="#network" className="text-gray-600 hover:text-sky-600 transition-colors">City Network</a>
+              <button className="btn-secondary">Login to Dashboard</button>
               <button 
                 onClick={() => setShowDashboard(true)}
                 className="btn-primary"
@@ -51,12 +51,12 @@ const Index = () => {
           <div className="max-w-6xl mx-auto text-center">
             <div className="mb-8">
               <h1 className="text-5xl md:text-7xl font-bold text-gradient mb-6 leading-tight">
-                Your City's<br />
-                <span className="text-sky-600">Health Companion</span>
+                Book. Track. Heal<br />
+                <span className="text-sky-600">Citywide Healthcare Access</span>
               </h1>
               <p className="text-xl md:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto leading-relaxed">
-                Skip the wait, book smart appointments, and track your queue in real-time. 
-                MediQueue connects you to every healthcare facility in your city.
+                Real-time, seamless access to OPD appointments across hospitals and clinics in your city. 
+                Skip the wait, track your queue, arrive when ready.
               </p>
             </div>
 
@@ -66,27 +66,37 @@ const Index = () => {
                 className="btn-primary text-lg px-8 py-4 ripple"
               >
                 <Calendar className="mr-2" size={20} />
-                Book Appointment Now
+                Book Appointment
               </button>
               <button className="btn-secondary text-lg px-8 py-4">
-                <Search className="mr-2" size={20} />
-                Find Doctors
+                <MapPin className="mr-2" size={20} />
+                Browse Hospitals
+              </button>
+              <button 
+                onClick={() => setShowDashboard(true)}
+                className="btn-secondary text-lg px-8 py-4"
+              >
+                <Activity className="mr-2" size={20} />
+                Login to Dashboard
               </button>
             </div>
 
-            {/* Stats */}
+            {/* Live Stats */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
               <div className="medical-card text-center">
-                <div className="text-3xl font-bold text-sky-600 mb-2">500+</div>
+                <div className="text-3xl font-bold text-emerald-600 mb-2">47</div>
+                <div className="text-gray-600">Appointments Today</div>
+                <div className="text-sm text-emerald-500 mt-1">↗ Live Updates</div>
+              </div>
+              <div className="medical-card text-center">
+                <div className="text-3xl font-bold text-sky-600 mb-2">8 min</div>
+                <div className="text-gray-600">Average Wait Time</div>
+                <div className="text-sm text-sky-500 mt-1">City-wide Average</div>
+              </div>
+              <div className="medical-card text-center">
+                <div className="text-3xl font-bold text-purple-600 mb-2">156</div>
                 <div className="text-gray-600">Healthcare Facilities</div>
-              </div>
-              <div className="medical-card text-center">
-                <div className="text-3xl font-bold text-emerald-600 mb-2">50k+</div>
-                <div className="text-gray-600">Happy Patients</div>
-              </div>
-              <div className="medical-card text-center">
-                <div className="text-3xl font-bold text-amber-600 mb-2">75%</div>
-                <div className="text-gray-600">Time Saved</div>
+                <div className="text-sm text-purple-500 mt-1">Connected Network</div>
               </div>
             </div>
           </div>
@@ -98,86 +108,84 @@ const Index = () => {
         </div>
       </div>
 
-      {/* Features Section */}
+      {/* How It Works Section */}
       <section id="features" className="py-20 px-4">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gradient mb-4">Smart Healthcare at Your Fingertips</h2>
+            <h2 className="text-4xl font-bold text-gradient mb-4">Your Health Journey, Simplified</h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Experience the future of healthcare access with our intelligent queue management system
+              Three simple steps to transform how you access healthcare in your city
             </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div className="medical-card text-center float">
-              <div className="w-16 h-16 bg-gradient-to-br from-sky-200 to-cyan-200 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <Clock className="text-sky-600" size={24} />
-              </div>
-              <h3 className="text-xl font-semibold mb-3 text-gray-800">Real-Time Queues</h3>
-              <p className="text-gray-600">
-                Track your position in line and get accurate wait time estimates. Never wait in uncertainty again.
-              </p>
-            </div>
-
-            <div className="medical-card text-center float-delayed">
-              <div className="w-16 h-16 bg-gradient-to-br from-emerald-200 to-teal-200 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <Calendar className="text-emerald-600" size={24} />
-              </div>
-              <h3 className="text-xl font-semibold mb-3 text-gray-800">Smart Booking</h3>
-              <p className="text-gray-600">
-                AI-powered appointment scheduling that finds the best slots based on your preferences and location.
-              </p>
-            </div>
-
-            <div className="medical-card text-center float">
-              <div className="w-16 h-16 bg-gradient-to-br from-purple-200 to-pink-200 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <Users className="text-purple-600" size={24} />
-              </div>
-              <h3 className="text-xl font-semibold mb-3 text-gray-800">City-Wide Network</h3>
-              <p className="text-gray-600">
-                Access to all healthcare facilities in your city - from government hospitals to private clinics.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* How It Works */}
-      <section id="how-it-works" className="py-20 px-4 bg-gradient-to-r from-sky-50/50 to-cyan-50/50">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gradient mb-4">How MediQueue Works</h2>
-            <p className="text-xl text-gray-600">Simple steps to better healthcare access</p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
             {[
               {
                 step: "01",
-                title: "Search & Book",
-                description: "Find doctors by specialty, location, or hospital. Book appointments instantly with real-time availability.",
-                icon: Search
+                title: "Book Your Visit",
+                description: "Choose your specialty, preferred hospital, and available time slot. Get instant confirmation with your unique token.",
+                icon: Calendar,
+                detail: "Next Available: Dr. Priya Sharma · ENT · 11:20 AM"
               },
               {
                 step: "02", 
-                title: "Get Your Token",
-                description: "Receive a unique digital token and join the smart queue. Track your position in real-time.",
-                icon: Clock
+                title: "Track Your Queue",
+                description: "Monitor your position in real-time. Get notified when it's almost your turn to see the doctor.",
+                icon: Clock,
+                detail: "You're 5 tokens away. Get ready!"
               },
               {
                 step: "03",
                 title: "Arrive When Ready",
-                description: "Get notified when it's almost your turn. No more waiting room crowding or uncertainty.",
-                icon: Users
+                description: "No more waiting room crowding. Walk in confident, knowing exactly when you'll be seen.",
+                icon: Users,
+                detail: "Token #A234 - Please proceed to Room 4"
               }
             ].map((item, index) => (
-              <div key={index} className="medical-card text-center relative">
+              <div key={index} className="medical-card text-center relative overflow-hidden">
                 <div className="text-6xl font-bold text-sky-100 absolute top-4 right-4">{item.step}</div>
                 <div className="w-16 h-16 bg-gradient-to-br from-sky-400 to-cyan-400 rounded-2xl flex items-center justify-center mx-auto mb-6 relative z-10">
                   <item.icon className="text-white" size={24} />
                 </div>
                 <h3 className="text-xl font-semibold mb-4 text-gray-800">{item.title}</h3>
-                <p className="text-gray-600">{item.description}</p>
+                <p className="text-gray-600 mb-4">{item.description}</p>
+                <div className="glass p-3 rounded-xl">
+                  <p className="text-sm text-sky-600 font-medium">{item.detail}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Hospital Network Status */}
+      <section id="network" className="py-20 px-4 bg-gradient-to-r from-sky-50/50 to-cyan-50/50">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gradient mb-4">Live Hospital Network</h2>
+            <p className="text-xl text-gray-600">Real-time availability across your city's healthcare facilities</p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              { name: "City General Hospital", load: "low", available: 23, specialty: "Multi-specialty" },
+              { name: "Metro Heart Center", load: "moderate", available: 8, specialty: "Cardiology" },
+              { name: "Children's Medical", load: "low", available: 15, specialty: "Pediatrics" },
+              { name: "Wellness Clinic", load: "high", available: 2, specialty: "General Practice" }
+            ].map((hospital, index) => (
+              <div key={index} className="medical-card">
+                <div className="flex items-center justify-between mb-3">
+                  <div className={`w-3 h-3 rounded-full ${
+                    hospital.load === 'low' ? 'bg-emerald-400' : 
+                    hospital.load === 'moderate' ? 'bg-amber-400' : 'bg-red-400'
+                  }`}></div>
+                  <span className="text-xs text-gray-500">{hospital.specialty}</span>
+                </div>
+                <h3 className="font-semibold text-gray-800 mb-2">{hospital.name}</h3>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-gray-600">Available slots</span>
+                  <span className="font-bold text-sky-600">{hospital.available}</span>
+                </div>
               </div>
             ))}
           </div>
@@ -189,20 +197,22 @@ const Index = () => {
         <div className="max-w-4xl mx-auto text-center">
           <div className="glass-strong rounded-3xl p-12">
             <h2 className="text-4xl font-bold text-gradient mb-6">
-              Ready to Transform Your Healthcare Experience?
+              Ready to Experience Smarter Healthcare?
             </h2>
             <p className="text-xl text-gray-600 mb-8">
-              Join thousands of patients who have already made the switch to smarter healthcare access.
+              Join thousands who've already made healthcare access effortless in your city.
             </p>
-            <button 
-              onClick={() => setShowDashboard(true)}
-              className="btn-primary text-lg px-8 py-4 mr-4"
-            >
-              Start Your Journey
-            </button>
-            <button className="btn-secondary text-lg px-8 py-4">
-              Learn More
-            </button>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <button 
+                onClick={() => setShowDashboard(true)}
+                className="btn-primary text-lg px-8 py-4"
+              >
+                Start Your Journey
+              </button>
+              <button className="btn-secondary text-lg px-8 py-4">
+                Watch How It Works
+              </button>
+            </div>
           </div>
         </div>
       </section>
