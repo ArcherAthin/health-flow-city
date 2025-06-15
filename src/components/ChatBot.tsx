@@ -1,6 +1,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { MessageCircle, Send, X, Bot, User, Loader } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
 
 interface Message {
   id: string;
@@ -46,54 +47,39 @@ const ChatBot: React.FC<ChatBotProps> = ({ userHealthProfile }) => {
     };
 
     setMessages(prev => [...prev, userMessage]);
+    const currentInput = inputValue;
     setInputValue('');
     setIsLoading(true);
 
-    // Simulate API call to Gemini
-    setTimeout(() => {
+    try {
+      const { data, error } = await supabase.functions.invoke('gemini-chat', {
+        body: { prompt: currentInput, healthProfile: userHealthProfile },
+      });
+
+      if (error) {
+        throw error;
+      }
+      
       const botResponse: Message = {
         id: (Date.now() + 1).toString(),
-        text: generateBotResponse(inputValue, userHealthProfile),
+        text: data.text || "Sorry, I couldn't get a response. Please try again.",
         isUser: false,
         timestamp: new Date()
       };
       setMessages(prev => [...prev, botResponse]);
-      setIsLoading(false);
-    }, 1500);
-  };
 
-  const generateBotResponse = (userInput: string, healthProfile: any) => {
-    const input = userInput.toLowerCase();
-    
-    // Health-related responses
-    if (input.includes('headache') || input.includes('head pain')) {
-      return "For headaches, I recommend staying hydrated, getting adequate rest, and managing stress. If you experience severe or persistent headaches, please consult with a neurologist. Would you like me to help you book an appointment?";
+    } catch (error) {
+      console.error('Error calling Gemini function:', error);
+      const errorResponse: Message = {
+        id: (Date.now() + 1).toString(),
+        text: 'There was an error connecting to the health assistant. Please check your connection and try again.',
+        isUser: false,
+        timestamp: new Date()
+      };
+      setMessages(prev => [...prev, errorResponse]);
+    } finally {
+      setIsLoading(false);
     }
-    
-    if (input.includes('fever') || input.includes('temperature')) {
-      return "Fever can be a sign of infection. Monitor your temperature, stay hydrated, and rest. If fever persists above 101°F (38°C) for more than 2 days, please consult a general physician. I can help you find available doctors nearby.";
-    }
-    
-    if (input.includes('appointment') || input.includes('book') || input.includes('doctor')) {
-      return "I can help you book an appointment! What type of specialist are you looking for? We have cardiologists, dermatologists, orthopedists, and many more available across the city.";
-    }
-    
-    if (input.includes('symptoms') || input.includes('pain')) {
-      return "I understand you're experiencing some discomfort. While I can provide general guidance, it's important to consult with a healthcare professional for proper diagnosis. Based on your symptoms, I can suggest the most appropriate specialist to see.";
-    }
-    
-    if (input.includes('emergency') || input.includes('urgent')) {
-      return "For medical emergencies, please call 108 immediately or visit the nearest emergency room. I can also help you find the closest hospital with emergency services. Your safety is the top priority.";
-    }
-    
-    // Default responses
-    const responses = [
-      "I'm here to help with your health-related questions and appointment bookings. Could you please provide more details about what you're looking for?",
-      "As your health assistant, I can help you understand symptoms, find appropriate specialists, and book appointments. What specific health concern can I assist you with?",
-      "I'd be happy to help! Whether you need to book an appointment, understand symptoms, or get health advice, I'm here to assist. What would you like to know?"
-    ];
-    
-    return responses[Math.floor(Math.random() * responses.length)];
   };
 
   return (
