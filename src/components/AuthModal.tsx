@@ -1,9 +1,11 @@
 
 import React, { useState } from 'react';
-import { X, User, Mail, Lock, Phone, Calendar, Heart, UserCircle } from 'lucide-react';
+import { X, User, Mail, Lock, Phone, Heart, UserCircle } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -29,51 +31,157 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onLoginSuccess }
     height: '',
     weight: ''
   });
+  const { toast } = useToast();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const fetchUserProfile = async (userId: string) => {
+    const { data: profile, error } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', userId)
+      .single();
+
+    if (error) {
+      toast({
+        title: 'Error fetching profile',
+        description: error.message,
+        variant: 'destructive',
+      });
+      return null;
+    }
+    return profile;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (isLogin) {
-      // Simulate login with stored name
-      const userData = {
-        name: formData.name || 'John Doe',
+      const { data, error } = await supabase.auth.signInWithPassword({
         email: formData.email,
+        password: formData.password,
+      });
+
+      if (error) {
+        return toast({
+          title: 'Login Failed',
+          description: error.message,
+          variant: 'destructive',
+        });
+      }
+
+      if (data.user) {
+        const profile = await fetchUserProfile(data.user.id);
+        if (profile) {
+          const userData = {
+            id: data.user.id,
+            email: data.user.email,
+            name: profile.name || formData.name,
+            phone: profile.phone,
+            healthProfile: {
+              age: profile.age,
+              gender: profile.gender,
+              bloodGroup: profile.blood_group,
+              allergies: profile.allergies,
+              chronicConditions: profile.chronic_conditions,
+              emergencyContact: profile.emergency_contact,
+              medicalHistory: profile.medical_history,
+              height: profile.height,
+              weight: profile.weight,
+            }
+          };
+          onLoginSuccess(userData);
+          onClose();
+        }
+      }
+    } else {
+      // Sign up
+      const { data, error } = await supabase.auth.signUp({
+        email: formData.email,
+        password: formData.password,
+        options: {
+          data: {
+            name: formData.name,
+            phone: formData.phone,
+          },
+        },
+      });
+
+      if (error) {
+        return toast({
+          title: 'Sign Up Failed',
+          description: error.message.includes('User already registered')
+            ? 'This email is already connected to an account.'
+            : error.message,
+          variant: 'destructive',
+        });
+      }
+      
+      if (data.user) {
+        toast({
+          title: 'Account Created!',
+          description: "Please complete your health profile. You may need to confirm your email to log in.",
+        });
+        setShowHealthForm(true);
+      }
+    }
+  };
+
+  const handleHealthFormSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+      return toast({
+        title: 'Authentication Error',
+        description: 'You must be logged in to update your health profile.',
+        variant: 'destructive',
+      });
+    }
+
+    const { data: updatedProfile, error } = await supabase
+      .from('profiles')
+      .update({
+        age: formData.age ? parseInt(formData.age) : null,
+        gender: formData.gender,
+        blood_group: formData.bloodGroup,
+        allergies: formData.allergies,
+        chronic_conditions: formData.chronicConditions,
+        emergency_contact: formData.emergencyContact,
+        medical_history: formData.medicalHistory,
+        height: formData.height ? parseInt(formData.height) : null,
+        weight: formData.weight ? parseInt(formData.weight) : null,
+      })
+      .eq('id', user.id)
+      .select()
+      .single();
+
+    if (error) {
+      return toast({
+        title: 'Profile Update Failed',
+        description: error.message,
+        variant: 'destructive',
+      });
+    }
+
+    if (updatedProfile) {
+      const userData = {
+        id: user.id,
+        email: user.email,
+        name: updatedProfile.name,
+        phone: updatedProfile.phone,
         healthProfile: {
-          age: '28',
-          bloodGroup: 'A+',
-          allergies: 'None',
-          chronicConditions: 'None',
-          emergencyContact: '+91 9876543210',
-          medicalHistory: 'No significant history'
+          age: updatedProfile.age,
+          gender: updatedProfile.gender,
+          bloodGroup: updatedProfile.blood_group,
+          allergies: updatedProfile.allergies,
+          chronicConditions: updatedProfile.chronic_conditions,
+          emergencyContact: updatedProfile.emergency_contact,
+          medicalHistory: updatedProfile.medical_history,
+          height: updatedProfile.height,
+          weight: updatedProfile.weight,
         }
       };
       onLoginSuccess(userData);
       onClose();
-    } else {
-      // Show health form after registration
-      setShowHealthForm(true);
     }
-  };
-
-  const handleHealthFormSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const userData = { 
-      name: formData.name, 
-      email: formData.email,
-      phone: formData.phone,
-      healthProfile: {
-        age: formData.age,
-        gender: formData.gender,
-        bloodGroup: formData.bloodGroup,
-        allergies: formData.allergies || 'None specified',
-        chronicConditions: formData.chronicConditions || 'None specified',
-        emergencyContact: formData.emergencyContact,
-        medicalHistory: formData.medicalHistory || 'No significant history',
-        height: formData.height,
-        weight: formData.weight
-      }
-    };
-    onLoginSuccess(userData);
-    onClose();
   };
 
   if (!isOpen) return null;

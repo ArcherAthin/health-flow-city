@@ -1,22 +1,83 @@
-import React, { useState } from 'react';
-import { Calendar, Clock, Users, Search, ArrowDown, Plus, MapPin, Activity, Menu } from 'lucide-react';
+
+import React, { useState, useEffect } from 'react';
+import { Calendar, Clock, Users, ArrowDown, MapPin, Activity, Menu, HeartPulse } from 'lucide-react';
 import BackgroundAnimation from '../components/BackgroundAnimation';
 import PatientDashboard from '../components/PatientDashboard';
 import AuthModal from '../components/AuthModal';
 import ChatBot from '../components/ChatBot';
+import { supabase } from '@/integrations/supabase/client';
+import { Session } from '@supabase/supabase-js';
 
 const Index = () => {
   const [showDashboard, setShowDashboard] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<any>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const handleAuthChange = async (session: Session | null) => {
+      if (session?.user) {
+        const { data: profile, error } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', session.user.id)
+          .single();
+
+        if (error) {
+            console.error("Error fetching profile:", error.message);
+            // Log out if profile is missing for a logged-in user
+            await supabase.auth.signOut();
+            return;
+        }
+
+        if (profile) {
+            const userData = {
+                id: session.user.id,
+                email: session.user.email,
+                name: profile.name || session.user.email,
+                phone: profile.phone,
+                healthProfile: {
+                    age: profile.age,
+                    gender: profile.gender,
+                    bloodGroup: profile.blood_group,
+                    allergies: profile.allergies,
+                    chronicConditions: profile.chronic_conditions,
+                    emergencyContact: profile.emergency_contact,
+                    medicalHistory: profile.medical_history,
+                    height: profile.height,
+                    weight: profile.weight,
+                }
+            };
+            setUser(userData);
+            setShowDashboard(true);
+        }
+      } else {
+        setUser(null);
+        setShowDashboard(false);
+      }
+    };
+
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      handleAuthChange(session);
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        handleAuthChange(session);
+      }
+    );
+
+    return () => subscription.unsubscribe();
+  }, []);
+
 
   const handleLoginSuccess = (userData: any) => {
     setUser(userData);
     setShowDashboard(true);
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
     setUser(null);
     setShowDashboard(false);
   };
@@ -42,7 +103,7 @@ const Index = () => {
           <div className="max-w-7xl mx-auto flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 bg-gradient-to-br from-sky-400 to-cyan-400 rounded-xl flex items-center justify-center shadow-lg">
-                <Plus className="text-white rotate-45" size={24} />
+                <HeartPulse className="text-white" size={24} />
               </div>
               <h1 className="text-2xl md:text-3xl font-bold text-gradient">MediQueue</h1>
             </div>
