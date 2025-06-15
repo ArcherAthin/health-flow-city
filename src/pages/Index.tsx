@@ -1,6 +1,5 @@
-
 import React, { useState, useEffect } from 'react';
-import { Calendar, Clock, Users, ArrowDown, MapPin, Activity, Menu, HeartPulse } from 'lucide-react';
+import { Calendar, Clock, Users, ArrowDown, MapPin, Activity, Menu, HeartPulse, Plus } from 'lucide-react';
 import BackgroundAnimation from '../components/BackgroundAnimation';
 import PatientDashboard from '../components/PatientDashboard';
 import AuthModal from '../components/AuthModal';
