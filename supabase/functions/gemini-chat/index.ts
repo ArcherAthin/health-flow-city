@@ -27,7 +27,8 @@ serve(async (req: Request) => {
       })
     }
     
-    const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${GEMINI_API_KEY}`
+    const model = 'gemini-1.5-flash-latest';
+    const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${GEMINI_API_KEY}`
 
     let systemInstruction = `You are MediQueue, a friendly and helpful AI health assistant. Your goal is to provide general health information and guidance.
 
@@ -80,9 +81,14 @@ Keep your responses concise, clear, and empathetic.`
     
     if (responseData.promptFeedback && responseData.promptFeedback.blockReason) {
         console.error('Gemini API Blocked Prompt:', responseData.promptFeedback);
-        throw new Error(`The request was blocked by the Gemini API. Reason: ${responseData.promptFeedback.blockReason}`);
+        const errorMessage = `The request was blocked by the Gemini API. Reason: ${responseData.promptFeedback.blockReason}`;
+        // Also check for safetyRatings to provide more context if available
+        if (responseData.promptFeedback.safetyRatings) {
+          console.error('Safety Ratings:', JSON.stringify(responseData.promptFeedback.safetyRatings, null, 2));
+        }
+        throw new Error(errorMessage);
     }
-
+    
     const text = responseData.candidates[0]?.content?.parts[0]?.text || "I'm having trouble thinking right now. Please try again in a moment.";
 
     return new Response(JSON.stringify({ text }), {
